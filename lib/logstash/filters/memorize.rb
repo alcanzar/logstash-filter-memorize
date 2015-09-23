@@ -48,7 +48,7 @@ class LogStash::Filters::Memorize < LogStash::Filters::Base
 
   public
   def register
-	# nothing needed
+  # nothing needed
   end # def register
 
   public
@@ -56,24 +56,23 @@ class LogStash::Filters::Memorize < LogStash::Filters::Base
     return unless filter?(event)
 
     any = false
+    key = event.sprintf(@stream_identity)
     @fields.each do |field|
       if event[field].nil?
-	map = @memorized[@stream_identity]
+        map = @memorized[key]
         val = map.nil? ? nil : map[field]
         if val.nil?
           val = @default.nil? ? nil : @default[field]
-        end
-	if !val.nil?
+        else
           event[field] = val
           any = true
-	end
+        end
       else
-        map = @memorized[@stream_identity]
-	if map.nil?
-          map = @memorized[@stream_identity] = Hash.new
-	end
-	val = event[field]
-	map[field] = event[field]
+        map = @memorized[key]
+        if map.nil?
+          map = @memorized[key] = Hash.new
+        end
+        map[field] = event[field]
       end #if
       if any
         filter_matched(event)
