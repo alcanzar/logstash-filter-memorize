@@ -2,7 +2,7 @@ require 'spec_helper'
 require "logstash/filters/memorize"
 
 describe LogStash::Filters::Memorize do
-  describe "Set to Hello World" do
+  describe "Captures id field" do
     let(:config) do <<-CONFIG
       filter {
         memorize {
@@ -14,7 +14,7 @@ describe LogStash::Filters::Memorize do
 
     sample("id" => "1") do
       expect(subject).to include("id")
-      expect(subject['id']).to eq('1')
+      expect(subject.get('id')).to eq('1')
     end
   end
 end
